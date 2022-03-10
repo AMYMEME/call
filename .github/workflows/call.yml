@@ -1,0 +1,22 @@
+name: Release dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      option:
+        required: true
+        default: p
+        description: "[ M | m | p ] release tag to update. default patch"
+
+jobs:
+  dispatch:
+    name: release dispatch
+    runs-on: ubuntu-latest
+    steps:
+      - name: ${{ github.action_repository }} dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with: 
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: ${{ github.action_repository }}
+          event-type: release-event
+          client-payload: '{"trigger": "release", "option": "${{ github.event.inputs.option }}", "repo": "${{ github.action_repository }}"}'
