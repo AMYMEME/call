@@ -12,11 +12,15 @@ jobs:
   dispatch:
     name: release dispatch
     runs-on: ubuntu-latest
+    env:
+      REPOSITORY: ${{ github.action_repository }}
     steps:
-      - name: ${{ github.action_repository }} dispatch
+      - name: Echo
+        run: echo $REPOSITORY
+      - name: $REPOSITORY dispatch
         uses: peter-evans/repository-dispatch@v1
         with: 
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          repository: ${{ github.action_repository }}
+          repository: $REPOSITORY
           event-type: release-event
-          client-payload: '{"trigger": "release", "option": "${{ github.event.inputs.option }}", "repo": "${{ github.action_repository }}"}'
+          client-payload: '{"trigger": "release", "option": "${{ github.event.inputs.option }}", "repo": "$REPOSITORY"}'
